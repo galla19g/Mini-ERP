@@ -4,6 +4,7 @@ import { Repository, DataSource } from 'typeorm';
 import { CrearCompraDto } from './dto/crear-compra.dto';
 import { Compra } from './entities/compra.entity';
 import { ProductosService } from '../productos/productos.service';
+import { Producto } from '../productos/entities/producto.entity';
 
 @Injectable()
 export class ComprasService {
@@ -29,8 +30,13 @@ export class ComprasService {
 
       const savedCompra = await queryRunner.manager.save(compra);
 
-      // Increment stock
-      await this.productosService.updateStock(crearCompraDto.productoId, crearCompraDto.cantidad);
+      // Increment stock using the same transaction manager
+      const producto = await queryRunner.manager.findOne(Producto, { where: { id: crearCompraDto.productoId } });
+      if (!producto) {
+        throw new NotFoundException('Producto no encontrado');
+      }
+      producto.stock += crearCompraDto.cantidad;
+      await queryRunner.manager.save(producto);
 
       await queryRunner.commitTransaction();
       return savedCompra;

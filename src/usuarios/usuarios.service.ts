@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 import { ActualizarUsuarioDto } from './dto/actualizar-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
@@ -17,7 +18,11 @@ export class UsuariosService {
     if (existingUser) {
       throw new ConflictException('El usuario ya existe');
     }
-    const user = this.usuariosRepository.create(crearUsuarioDto);
+    const hashedPassword = await bcrypt.hash(crearUsuarioDto.password, 10);
+    const user = this.usuariosRepository.create({
+      ...crearUsuarioDto,
+      password: hashedPassword,
+    });
     return this.usuariosRepository.save(user);
   }
 
@@ -36,6 +41,11 @@ export class UsuariosService {
   async update(id: number, actualizarUsuarioDto: ActualizarUsuarioDto) {
     const user = await this.findOne(id);
     if (!user) throw new ConflictException('Usuario no encontrado');
+
+    if (actualizarUsuarioDto.password) {
+      actualizarUsuarioDto.password = await bcrypt.hash(actualizarUsuarioDto.password, 10);
+    }
+
     this.usuariosRepository.merge(user, actualizarUsuarioDto);
     return this.usuariosRepository.save(user);
   }

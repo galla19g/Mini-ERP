@@ -5,6 +5,7 @@ import { CrearVentaDto } from './dto/crear-venta.dto';
 import { Venta } from './entities/venta.entity';
 import { DetalleVenta } from './entities/detalle-venta.entity';
 import { ProductosService } from '../productos/productos.service';
+import { Producto } from '../productos/entities/producto.entity';
 
 @Injectable()
 export class VentasService {
@@ -25,8 +26,12 @@ export class VentasService {
       const detalles: DetalleVenta[] = [];
 
       for (const item of crearVentaDto.items) {
-        const producto = await this.productosService.findOne(item.productoId);
+        const producto = await queryRunner.manager.findOne(Producto, { where: { id: item.productoId } });
         
+        if (!producto) {
+          throw new BadRequestException(`Producto con ID ${item.productoId} no encontrado`);
+        }
+
         if (producto.stock < item.cantidad) {
           throw new BadRequestException(`No hay suficiente stock para el producto ${producto.nombre}`);
         }
@@ -39,8 +44,9 @@ export class VentasService {
 
         total += detalle.cantidad * detalle.precioUnitario;
 
-        // Update stock
-        await this.productosService.updateStock(producto.id, -item.cantidad);
+        // Update stock using transaction manager
+        producto.stock -= item.cantidad;
+        await queryRunner.manager.save(producto);
       }
 
       const venta = this.ventasRepository.create({

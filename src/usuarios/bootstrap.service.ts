@@ -8,18 +8,24 @@ export class BootstrapService implements OnModuleInit {
   constructor(private usuariosService: UsuariosService) {}
 
   async onModuleInit() {
-    const adminEmail = 'admin@sigemp.com';
-    const existingAdmin = await this.usuariosService.findOneByEmail(adminEmail);
+    const rolesToCreate = [
+      { email: 'admin@sigemp.com', password: 'password123', rol: Role.ADMIN },
+      { email: 'contador@sigemp.com', password: 'password123', rol: Role.CONTADOR },
+      { email: 'proveedor@sigemp.com', password: 'password123', rol: Role.PROVEEDOR },
+      { email: 'cliente@sigemp.com', password: 'password123', rol: Role.CLIENTE },
+    ];
 
-    if (!existingAdmin) {
-      console.log('Creando usuario administrador por defecto...');
-      const hashedPassword = await bcrypt.hash('admin123', 10);
-      await this.usuariosService.create({
-        email: adminEmail,
-        password: hashedPassword,
-        rol: Role.ADMIN,
-      });
-      console.log('Usuario administrador creado con éxito.');
+    for (const userData of rolesToCreate) {
+      const existingUser = await this.usuariosService.findOneByEmail(userData.email);
+      if (!existingUser) {
+        console.log(`Creando usuario ${userData.rol.toLowerCase()} por defecto...`);
+        await this.usuariosService.create({
+          email: userData.email,
+          password: userData.password,
+          rol: userData.rol,
+        });
+        console.log(`Usuario ${userData.rol.toLowerCase()} creado con éxito.`);
+      }
     }
   }
 }
