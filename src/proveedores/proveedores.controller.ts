@@ -16,7 +16,7 @@ export class ProveedoresController {
   constructor(private readonly proveedoresService: ProveedoresService) {}
 
   @Post()
-  @Roles(Role.ADMIN, Role.ALMACENISTA)
+  @Roles(Role.ADMIN, Role.PRODUCTOS)
   @ApiOperation({ summary: 'Crear un nuevo proveedor' })
   create(@Body() crearProveedorDto: CrearProveedorDto) {
     return this.proveedoresService.create(crearProveedorDto);
@@ -35,7 +35,7 @@ export class ProveedoresController {
   }
 
   @Patch(':id')
-  @Roles(Role.ADMIN, Role.ALMACENISTA)
+  @Roles(Role.ADMIN, Role.PRODUCTOS)
   @ApiOperation({ summary: 'Actualizar un proveedor' })
   update(@Param('id') id: string, @Body() actualizarProveedorDto: ActualizarProveedorDto) {
     return this.proveedoresService.update(+id, actualizarProveedorDto);

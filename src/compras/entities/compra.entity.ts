@@ -22,6 +22,9 @@ export class Compra {
   @Column('decimal', { precision: 10, scale: 2 })
   precioUnitario: number;
 
+  @Column({ nullable: true })
+  numeroFactura: string;
+
   @CreateDateColumn()
   createdAt: Date;
 }

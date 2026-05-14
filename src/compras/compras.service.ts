@@ -26,6 +26,7 @@ export class ComprasService {
         producto: { id: crearCompraDto.productoId } as any,
         cantidad: crearCompraDto.cantidad,
         precioUnitario: crearCompraDto.precioUnitario,
+        numeroFactura: crearCompraDto.numeroFactura,
       });
 
       const savedCompra = await queryRunner.manager.save(compra);

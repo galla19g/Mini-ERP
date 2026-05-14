@@ -15,13 +15,14 @@ export class ComprasController {
   constructor(private readonly comprasService: ComprasService) {}
 
   @Post()
-  @Roles(Role.ADMIN, Role.ALMACENISTA)
+  @Roles(Role.ADMIN, Role.PRODUCTOS)
   @ApiOperation({ summary: 'Registrar una nueva compra' })
   create(@Body() crearCompraDto: CrearCompraDto) {
     return this.comprasService.create(crearCompraDto);
   }
 
   @Get()
+  @Roles(Role.ADMIN, Role.PRODUCTOS, Role.PROVEEDOR)
   @ApiOperation({ summary: 'Obtener todas las compras' })
   findAll() {
     return this.comprasService.findAll();
@@ -34,7 +35,7 @@ export class ComprasController {
   }
 
   @Patch(':id')
-  @Roles(Role.ADMIN, Role.ALMACENISTA)
+  @Roles(Role.ADMIN, Role.PRODUCTOS)
   @ApiOperation({ summary: 'Actualizar una compra' })
   update(@Param('id') id: string, @Body() actualizarCompraDto: any) {
     return this.comprasService.update(+id, actualizarCompraDto);

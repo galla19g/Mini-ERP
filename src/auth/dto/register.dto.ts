@@ -14,5 +14,5 @@ export class RegisterDto {
 
   @ApiProperty({ enum: Role, default: Role.VENDEDOR })
   @IsEnum(Role)
-  role: Role;
+  rol: Role;
 }

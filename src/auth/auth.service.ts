@@ -13,11 +13,7 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-    return this.usuariosService.create({
-      ...registerDto,
-      password: hashedPassword,
-    });
+    return this.usuariosService.create(registerDto);
   }
 
   async login(loginDto: LoginDto) {

@@ -10,6 +10,8 @@ export class BootstrapService implements OnModuleInit {
   async onModuleInit() {
     const rolesToCreate = [
       { email: 'admin@sigemp.com', password: 'password123', rol: Role.ADMIN },
+      { email: 'vendedor@sigemp.com', password: 'password123', rol: Role.VENDEDOR },
+      { email: 'productos@sigemp.com', password: 'password123', rol: Role.PRODUCTOS },
       { email: 'contador@sigemp.com', password: 'password123', rol: Role.CONTADOR },
       { email: 'proveedor@sigemp.com', password: 'password123', rol: Role.PROVEEDOR },
       { email: 'cliente@sigemp.com', password: 'password123', rol: Role.CLIENTE },

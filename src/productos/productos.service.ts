@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CrearProductoDto } from './dto/crear-producto.dto';
 import { ActualizarProductoDto } from './dto/actualizar-producto.dto';
 import { Producto } from './entities/producto.entity';
+import { ProductoTipo } from './enums/producto-tipo.enum';
 
 @Injectable()
 export class ProductosService {
@@ -17,7 +18,10 @@ export class ProductosService {
     return this.productosRepository.save(producto);
   }
 
-  findAll() {
+  findAll(tipo?: ProductoTipo) {
+    if (tipo) {
+      return this.productosRepository.find({ where: { tipo } });
+    }
     return this.productosRepository.find();
   }
 
