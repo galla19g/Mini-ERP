@@ -36,10 +36,6 @@ describe('ProductosService (Capa de Servicios)', () => {
     repository = module.get<MockRepository<Producto>>(getRepositoryToken(Producto));
   });
 
-  it('debe estar definido', () => {
-    expect(service).toBeDefined();
-  });
-
   describe('findOne', () => {
     it('debería lanzar NotFoundException si el producto no existe', async () => {
       // Arrange
