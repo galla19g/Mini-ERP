@@ -62,6 +62,7 @@ export class ReportesService {
     } catch (error) {
       this.logger.error(`Error al generar reporte de ventas: ${error.message}`);
       this.manejarErrorMicroservicio(error);
+      throw error;
     }
   }
 
@@ -90,6 +91,7 @@ export class ReportesService {
     } catch (error) {
       this.logger.error(`Error al generar reporte de compras: ${error.message}`);
       this.manejarErrorMicroservicio(error);
+      throw error;
     }
   }
 
@@ -120,6 +122,7 @@ export class ReportesService {
         `Error al generar reporte de inventario: ${error.message}`,
       );
       this.manejarErrorMicroservicio(error);
+      throw error;
     }
   }
 

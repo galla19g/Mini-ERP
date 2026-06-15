@@ -8,7 +8,7 @@ import {
   Get,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import type { Response } from 'express';
 import { ReportesService } from './reportes.service';
 import { CreateReporteVentasDto } from './dto/create-reporte-ventas.dto';
 import { CreateReporteComprasDto } from './dto/create-reporte-compras.dto';
@@ -16,6 +16,7 @@ import { CreateReporteInventarioDto } from './dto/create-reporte-inventario.dto'
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../usuarios/enums/rol.enum';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('Reportes')
@@ -35,7 +36,7 @@ export class ReportesController {
 
   @Post('ventas')
   @HttpCode(HttpStatus.OK)
-  @Roles('admin', 'gerente', 'vendedor')
+  @Roles(Role.ADMIN, Role.VENDEDOR)
   @ApiOperation({
     summary: 'Generar reporte de ventas en PDF',
     description:
@@ -61,7 +62,7 @@ export class ReportesController {
 
   @Post('compras')
   @HttpCode(HttpStatus.OK)
-  @Roles('admin', 'gerente', 'comprador')
+  @Roles(Role.ADMIN, Role.VENDEDOR)
   @ApiOperation({
     summary: 'Generar reporte de compras en PDF',
     description:
@@ -87,7 +88,7 @@ export class ReportesController {
 
   @Post('inventario')
   @HttpCode(HttpStatus.OK)
-  @Roles('admin', 'gerente', 'almacenero')
+  @Roles(Role.ADMIN, Role.PRODUCTOS)
   @ApiOperation({
     summary: 'Generar reporte de inventario en PDF',
     description:
